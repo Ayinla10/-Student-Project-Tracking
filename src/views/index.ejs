@@ -3,59 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Project Tracker</title>
+  <title>BlueCrest Project Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-  <div class="topbar">
-    <h1>📘 Student Project Tracker</h1>
-    <div class="user-info"><a href="/admin/login" style="color:#fff;">Admin Login</a></div>
+<body class="student-page">
+  <div class="hero">
+    <div class="hero-inner">
+      <img src="/images/logo.png" alt="BlueCrest logo" class="hero-logo" />
+      <h1>Project Progress Tracker</h1>
+      <p>Submit your final year project status and keep your supervisor in the loop &mdash; in seconds.</p>
+    </div>
+    <div class="hero-wave"></div>
   </div>
 
   <div class="container">
-    <div class="card">
-      <h2 style="margin-top:0;color:var(--blue-900);">Submit / Update Your Project Status</h2>
-      <p class="hint">Enter your roll number first. If you've registered before, your name and supervisor will load automatically and you'll only need to update your status.</p>
+    <div class="form-card">
+      <div class="form-card-head">
+        <span class="step-badge">Step 1</span>
+        <h2>Find or Register Your Record</h2>
+        <p class="hint">Enter your roll number first. Returning students get their name and supervisor filled in automatically &mdash; only the status needs updating.</p>
+      </div>
 
       <form id="studentForm" autocomplete="off">
-        <div class="form-group">
-          <label for="rollNumber">Roll Number *</label>
-          <input type="text" id="rollNumber" name="rollNumber" required placeholder="e.g. CSC/2021/045" />
+        <div class="field-group">
+          <span class="field-icon">🎓</span>
+          <div class="field-body">
+            <label for="rollNumber">Roll Number *</label>
+            <input type="text" id="rollNumber" name="rollNumber" required placeholder="e.g. CSC/2021/045" />
+          </div>
         </div>
 
-        <div id="lookupHint" class="hint"></div>
+        <div id="lookupHint" class="lookup-hint"></div>
 
-        <div class="form-group" id="fullNameGroup">
-          <label for="fullName">Full Name *</label>
-          <input type="text" id="fullName" name="fullName" placeholder="Your full name" />
+        <div class="field-group" id="fullNameGroup">
+          <span class="field-icon">🧑‍🎓</span>
+          <div class="field-body">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Your full name" />
+          </div>
         </div>
 
-        <div class="form-group" id="supervisorGroup">
-          <label for="supervisor">Assigned Supervisor *</label>
-          <input type="text" id="supervisor" name="supervisor" placeholder="Supervisor's name" />
+        <div class="field-group" id="supervisorGroup">
+          <span class="field-icon">👨‍🏫</span>
+          <div class="field-body">
+            <label for="supervisor">Assigned Supervisor *</label>
+            <input type="text" id="supervisor" name="supervisor" placeholder="Supervisor's name" />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="status">Current Project Status *</label>
-          <select id="status" name="status" required>
-            <option value="">Select status</option>
-            <option>Proposal</option>
-            <option>Chapter 1</option>
-            <option>Chapter 2</option>
-            <option>Chapter 3</option>
-            <option>Chapter 4</option>
-            <option>Chapter 5</option>
-            <option>Completed</option>
-          </select>
+        <div class="field-group">
+          <span class="field-icon">📈</span>
+          <div class="field-body">
+            <label for="status">Current Project Status *</label>
+            <select id="status" name="status" required>
+              <option value="">Select status</option>
+              <option>Proposal</option>
+              <option>Chapter 1</option>
+              <option>Chapter 2</option>
+              <option>Chapter 3</option>
+              <option>Chapter 4</option>
+              <option>Chapter 5</option>
+              <option>Completed</option>
+            </select>
+          </div>
         </div>
 
-        <button type="submit" class="btn" id="submitBtn">
+        <button type="submit" class="btn btn-submit" id="submitBtn">
           <span class="spinner"></span>
-          <span class="btn-label">Submit</span>
+          <span class="btn-label">Submit Progress</span>
         </button>
       </form>
     </div>
+
+    <div class="status-legend">
+      <span class="legend-title">Status stages</span>
+      <div class="legend-pills">
+        <span class="pill">Proposal</span>
+        <span class="pill">Chapter 1</span>
+        <span class="pill">Chapter 2</span>
+        <span class="pill">Chapter 3</span>
+        <span class="pill">Chapter 4</span>
+        <span class="pill">Chapter 5</span>
+        <span class="pill pill-done">Completed</span>
+      </div>
+    </div>
   </div>
+
+  <footer class="site-footer">
+    <img src="/images/logo.png" alt="BlueCrest logo" class="footer-logo" />
+    <p>&copy; <%= new Date().getFullYear() %> BlueCrest &mdash; Education for Life</p>
+    <p class="footer-credit">Built by Prof Tidjani</p>
+  </footer>
 
   <div id="toast" class="toast"></div>
 
