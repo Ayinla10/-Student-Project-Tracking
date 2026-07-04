@@ -1,4 +1,5 @@
 const studentModel = require('../models/studentModel');
+const logModel = require('../models/logModel');
 
 // GET /api/student/:rollNumber
 // Used by the frontend to check whether a roll number already exists,
@@ -37,6 +38,17 @@ async function submitStudent(req, res) {
   }
 
   const student = await studentModel.upsertStudent({ rollNumber, fullName, supervisor, status });
+
+  // Audit trail: every self-service submission is logged with the
+  // submitter's IP so admins can spot suspicious changes to a record.
+  await logModel.insertLog({
+    rollNumber,
+    action: existing ? 'update' : 'create',
+    fullName: student.full_name,
+    supervisor: student.supervisor,
+    status,
+    ipAddress: req.ip,
+  });
 
   return res.status(existing ? 200 : 201).json({
     message: existing ? 'Project status updated successfully.' : 'Registered successfully.',

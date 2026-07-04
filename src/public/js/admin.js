@@ -64,6 +64,7 @@
         <td>${new Date(s.updatedAt).toLocaleString()}</td>
         <td>
           <button class="btn btn-small edit-btn" data-id="${s.id}">Edit</button>
+          <button class="btn btn-small btn-secondary history-btn" data-roll="${escapeHtml(s.rollNumber)}">History</button>
           <button class="btn btn-small btn-danger delete-btn" data-id="${s.id}" data-name="${escapeHtml(s.fullName)}">Delete</button>
         </td>
       </tr>
@@ -74,6 +75,9 @@
     });
     studentsBody.querySelectorAll('.delete-btn').forEach((btn) => {
       btn.addEventListener('click', () => openDeleteModal(btn.dataset.id, btn.dataset.name));
+    });
+    studentsBody.querySelectorAll('.history-btn').forEach((btn) => {
+      btn.addEventListener('click', () => openHistoryModal(btn.dataset.roll));
     });
   }
 
@@ -238,6 +242,42 @@
       showToast('Network error while deleting.', 'error');
     }
   });
+
+  // --- Submission history modal ---
+  const historyOverlay = document.getElementById('historyOverlay');
+  const historyBody = document.getElementById('historyBody');
+
+  async function openHistoryModal(rollNumber) {
+    document.getElementById('historyRollNumber').textContent = rollNumber;
+    historyBody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
+    historyOverlay.classList.add('show');
+    try {
+      const res = await fetch(`/admin/students/${encodeURIComponent(rollNumber)}/logs`, {
+        headers: { Accept: 'application/json' },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        historyBody.innerHTML = `<tr><td colspan="4">${escapeHtml(data.error || 'Failed to load history.')}</td></tr>`;
+        return;
+      }
+      if (!data.logs.length) {
+        historyBody.innerHTML = '<tr><td colspan="4">No submissions logged yet.</td></tr>';
+        return;
+      }
+      historyBody.innerHTML = data.logs.map((l) => `
+        <tr>
+          <td>${new Date(l.createdAt).toLocaleString()}</td>
+          <td>${l.action === 'create' ? 'Registered' : 'Updated'}</td>
+          <td>${escapeHtml(l.status)}</td>
+          <td>${escapeHtml(l.ipAddress || 'unknown')}</td>
+        </tr>
+      `).join('');
+    } catch (err) {
+      historyBody.innerHTML = '<tr><td colspan="4">Network error while loading history.</td></tr>';
+    }
+  }
+
+  document.getElementById('closeHistory').addEventListener('click', () => historyOverlay.classList.remove('show'));
 
   loadStudents();
 })();

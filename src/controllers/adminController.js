@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const ExcelJS = require('exceljs');
 const adminModel = require('../models/adminModel');
 const studentModel = require('../models/studentModel');
+const logModel = require('../models/logModel');
 
 function loginPage(req, res) {
   if (req.session && req.session.adminId) {
@@ -99,6 +100,21 @@ async function deleteStudent(req, res) {
   res.json({ message: 'Student deleted successfully' });
 }
 
+// GET /admin/students/:rollNumber/logs - submission audit trail for one student.
+async function getStudentLogs(req, res) {
+  const logs = await logModel.findByRollNumber(req.params.rollNumber.trim());
+  res.json({
+    logs: logs.map((l) => ({
+      action: l.action,
+      fullName: l.full_name,
+      supervisor: l.supervisor,
+      status: l.status,
+      ipAddress: l.ip_address,
+      createdAt: l.created_at,
+    })),
+  });
+}
+
 // GET /admin/students/export - Excel export of all matching records.
 async function exportStudents(req, res) {
   const search = (req.query.search || '').trim();
@@ -157,4 +173,5 @@ module.exports = {
   updateStudent,
   deleteStudent,
   exportStudents,
+  getStudentLogs,
 };

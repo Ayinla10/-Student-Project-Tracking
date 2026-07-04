@@ -18,6 +18,7 @@ router.get('/logout', adminController.logout);
 router.get('/dashboard', requireAdmin, adminController.dashboard);
 router.get('/students', requireAdmin, asyncHandler(adminController.listStudents));
 router.get('/students/export', requireAdmin, asyncHandler(adminController.exportStudents));
+router.get('/students/:rollNumber/logs', requireAdmin, asyncHandler(adminController.getStudentLogs));
 router.post(
   '/student/update',
   requireAdmin,

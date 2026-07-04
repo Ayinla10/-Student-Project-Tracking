@@ -251,6 +251,9 @@ tbody tr:hover { background: var(--blue-50); }
   width: 100%;
   max-width: 420px;
 }
+.modal.modal-wide {
+  max-width: 640px;
+}
 .modal h3 { margin-top: 0; }
 .modal .actions { display: flex; gap: 10px; margin-top: 20px; }
 
