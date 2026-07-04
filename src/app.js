@@ -5,6 +5,11 @@ const routes = require('./routes');
 
 const app = express();
 
+// Render (and most PaaS hosts) sit behind a reverse proxy that terminates
+// TLS. Trusting the first proxy hop lets Express read X-Forwarded-* headers
+// correctly, which express-session relies on for secure cookies.
+app.set('trust proxy', 1);
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
