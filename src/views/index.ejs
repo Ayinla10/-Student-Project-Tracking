@@ -32,53 +32,63 @@
         <p class="hint">Enter your roll number and click Edit to load your details, then update your status.</p>
       </div>
 
-      <div class="field-group">
-        <span class="field-icon">🎓</span>
-        <div class="field-body">
-          <label for="lookupRollNumber">Roll Number *</label>
-          <input type="text" id="lookupRollNumber" placeholder="e.g. CSC/2021/045" />
+      <div id="updateFormArea">
+        <div class="field-group">
+          <span class="field-icon">🎓</span>
+          <div class="field-body">
+            <label for="lookupRollNumber">Roll Number *</label>
+            <input type="text" id="lookupRollNumber" placeholder="e.g. CSC/2021/045" />
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-submit" id="findRecordBtn">
+          <span class="spinner"></span>
+          <span class="btn-label">Edit</span>
+        </button>
+
+        <div id="lookupError" class="lookup-error"></div>
+
+        <!-- Revealed once a record is found -->
+        <div id="updateRevealed" class="revealed-panel" hidden>
+          <div class="readonly-summary">
+            <div>
+              <span class="ro-label">Full Name</span>
+              <span class="ro-value" id="roFullName"></span>
+            </div>
+            <div>
+              <span class="ro-label">Supervisor</span>
+              <span class="ro-value" id="roSupervisor"></span>
+            </div>
+          </div>
+
+          <div class="progress-tracker" id="progressTracker"></div>
+
+          <form id="updateForm" autocomplete="off">
+            <div class="field-group">
+              <span class="field-icon">📈</span>
+              <div class="field-body">
+                <label for="updateStatus">Current Project Status *</label>
+                <select id="updateStatus" required>
+                  <% statusValues.forEach(function(s) { %>
+                    <option value="<%= s %>"><%= s %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-submit" id="updateBtn">
+              <span class="spinner"></span>
+              <span class="btn-label">Update My Progress</span>
+            </button>
+          </form>
         </div>
       </div>
 
-      <button type="button" class="btn btn-submit" id="findRecordBtn">
-        <span class="spinner"></span>
-        <span class="btn-label">Edit</span>
-      </button>
-
-      <div id="lookupError" class="lookup-error"></div>
-
-      <!-- Revealed once a record is found -->
-      <div id="updateRevealed" class="revealed-panel" hidden>
-        <div class="readonly-summary">
-          <div>
-            <span class="ro-label">Full Name</span>
-            <span class="ro-value" id="roFullName"></span>
-          </div>
-          <div>
-            <span class="ro-label">Supervisor</span>
-            <span class="ro-value" id="roSupervisor"></span>
-          </div>
-        </div>
-
-        <div class="progress-tracker" id="progressTracker"></div>
-
-        <form id="updateForm" autocomplete="off">
-          <div class="field-group">
-            <span class="field-icon">📈</span>
-            <div class="field-body">
-              <label for="updateStatus">Current Project Status *</label>
-              <select id="updateStatus" required>
-                <% statusValues.forEach(function(s) { %>
-                  <option value="<%= s %>"><%= s %></option>
-                <% }); %>
-              </select>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-submit" id="updateBtn">
-            <span class="spinner"></span>
-            <span class="btn-label">Update My Progress</span>
-          </button>
-        </form>
+      <!-- Shown after a successful status update -->
+      <div id="updateSuccess" class="success-message" hidden>
+        <div class="success-icon">&#10003;</div>
+        <h3>Progress Updated!</h3>
+        <p id="updateSuccessText"></p>
+        <button type="button" class="btn btn-secondary" id="updateAgainBtn">Make Another Update</button>
       </div>
     </div>
 
@@ -90,50 +100,60 @@
         <p class="hint">One-time setup. After this, use "Update My Progress" above to move through the stages.</p>
       </div>
 
-      <form id="registerForm" autocomplete="off">
-        <div class="field-group">
-          <span class="field-icon">🎓</span>
-          <div class="field-body">
-            <label for="rollNumber">Roll Number *</label>
-            <input type="text" id="rollNumber" required placeholder="e.g. CSC/2021/045" />
+      <div id="registerFormArea">
+        <form id="registerForm" autocomplete="off">
+          <div class="field-group">
+            <span class="field-icon">🎓</span>
+            <div class="field-body">
+              <label for="rollNumber">Roll Number *</label>
+              <input type="text" id="rollNumber" required placeholder="e.g. CSC/2021/045" />
+            </div>
           </div>
-        </div>
 
-        <div id="registerRollHint" class="lookup-error"></div>
+          <div id="registerRollHint" class="lookup-error"></div>
 
-        <div id="registerRestFields">
-          <div class="field-group">
-            <span class="field-icon">🧑‍🎓</span>
-            <div class="field-body">
-              <label for="fullName">Full Name *</label>
-              <input type="text" id="fullName" required placeholder="Your full name" />
+          <div id="registerRestFields">
+            <div class="field-group">
+              <span class="field-icon">🧑‍🎓</span>
+              <div class="field-body">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" required placeholder="Your full name" />
+              </div>
             </div>
-          </div>
-          <div class="field-group">
-            <span class="field-icon">👨‍🏫</span>
-            <div class="field-body">
-              <label for="supervisor">Assigned Supervisor *</label>
-              <input type="text" id="supervisor" required placeholder="Supervisor's name" />
+            <div class="field-group">
+              <span class="field-icon">👨‍🏫</span>
+              <div class="field-body">
+                <label for="supervisor">Assigned Supervisor *</label>
+                <input type="text" id="supervisor" required placeholder="Supervisor's name" />
+              </div>
             </div>
-          </div>
-          <div class="field-group">
-            <span class="field-icon">📈</span>
-            <div class="field-body">
-              <label for="status">Current Project Status *</label>
-              <select id="status" required>
-                <option value="">Select status</option>
-                <% statusValues.forEach(function(s) { %>
-                  <option value="<%= s %>"><%= s %></option>
-                <% }); %>
-              </select>
+            <div class="field-group">
+              <span class="field-icon">📈</span>
+              <div class="field-body">
+                <label for="status">Current Project Status *</label>
+                <select id="status" required>
+                  <option value="">Select status</option>
+                  <% statusValues.forEach(function(s) { %>
+                    <option value="<%= s %>"><%= s %></option>
+                  <% }); %>
+                </select>
+              </div>
             </div>
+            <button type="submit" class="btn btn-submit" id="registerBtn">
+              <span class="spinner"></span>
+              <span class="btn-label">Register</span>
+            </button>
           </div>
-          <button type="submit" class="btn btn-submit" id="registerBtn">
-            <span class="spinner"></span>
-            <span class="btn-label">Register</span>
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
+
+      <!-- Shown after successful first-time registration -->
+      <div id="registerSuccess" class="success-message" hidden>
+        <div class="success-icon">&#10003;</div>
+        <h3>Registration Successful!</h3>
+        <p id="registerSuccessText"></p>
+        <button type="button" class="btn btn-submit" id="goUpdateAfterRegister">Go to Update My Progress</button>
+      </div>
     </div>
 
     <div class="status-legend">

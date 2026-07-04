@@ -565,6 +565,35 @@ body.student-page {
 }
 .progress-step.current .progress-label { color: var(--blue-700); }
 
+.success-message {
+  text-align: center;
+  padding: 20px 8px 6px;
+}
+.success-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #e6f4ea;
+  color: var(--green-600);
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-message h3 {
+  margin: 0 0 8px;
+  color: var(--blue-900);
+  font-size: 1.2rem;
+}
+.success-message p {
+  color: var(--gray-700);
+  font-size: 0.92rem;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
 .status-legend {
   margin-top: 22px;
   text-align: center;
