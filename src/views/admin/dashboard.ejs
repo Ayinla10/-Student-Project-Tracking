@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Student Project Tracker</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <h1>📊 Admin Dashboard</h1>
+    <div class="user-info">
+      <span>Signed in as <strong><%= username %></strong></span>
+      <a class="logout" href="/admin/logout">Log Out</a>
+    </div>
+  </div>
+
+  <div class="container" style="max-width:1200px;">
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="card">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search by name or roll number" />
+        <select id="supervisorFilter"><option value="">All supervisors</option></select>
+        <select id="statusFilter">
+          <option value="">All statuses</option>
+          <% statusValues.forEach(function(s) { %>
+            <option value="<%= s %>"><%= s %></option>
+          <% }); %>
+        </select>
+        <div class="spacer"></div>
+        <a class="btn btn-small" id="exportBtn" href="/admin/students/export" style="text-decoration:none;">Export to Excel</a>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="roll_number">Roll Number</th>
+              <th data-sort="full_name">Full Name</th>
+              <th data-sort="supervisor">Supervisor</th>
+              <th data-sort="status">Status</th>
+              <th data-sort="created_at">Created At</th>
+              <th data-sort="updated_at">Updated At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsBody">
+            <tr><td colspan="7">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <!-- Edit modal -->
+  <div class="modal-overlay" id="editOverlay">
+    <div class="modal">
+      <h3>Edit Student</h3>
+      <form id="editForm">
+        <input type="hidden" id="editId" />
+        <div class="form-group">
+          <label>Roll Number</label>
+          <input type="text" id="editRollNumber" readonly />
+        </div>
+        <div class="form-group">
+          <label for="editFullName">Full Name</label>
+          <input type="text" id="editFullName" required />
+        </div>
+        <div class="form-group">
+          <label for="editSupervisor">Supervisor</label>
+          <input type="text" id="editSupervisor" required />
+        </div>
+        <div class="form-group">
+          <label for="editStatus">Status</label>
+          <select id="editStatus" required>
+            <% statusValues.forEach(function(s) { %>
+              <option value="<%= s %>"><%= s %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+          <button type="submit" class="btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete confirmation modal -->
+  <div class="modal-overlay" id="deleteOverlay">
+    <div class="modal">
+      <h3>Delete Student?</h3>
+      <p>This will permanently remove <strong id="deleteName"></strong>'s record. This action cannot be undone.</p>
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
