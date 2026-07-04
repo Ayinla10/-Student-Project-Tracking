@@ -13,66 +13,120 @@
     <div class="hero-inner">
       <img src="/images/logo.png" alt="BlueCrest logo" class="hero-logo" />
       <h1>Project Progress Tracker</h1>
-      <p>Submit your final year project status and keep your supervisor in the loop &mdash; in seconds.</p>
+      <p>Register once, then come back any time to move your progress forward.</p>
     </div>
     <div class="hero-wave"></div>
   </div>
 
   <div class="container">
-    <div class="form-card">
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="update">Update My Progress</button>
+      <button type="button" class="tab-btn" data-tab="register">First-Time Registration</button>
+    </div>
+
+    <!-- ===================== Update Progress panel ===================== -->
+    <div class="form-card tab-panel active" id="panel-update">
       <div class="form-card-head">
-        <span class="step-badge">Step 1</span>
-        <h2>Find or Register Your Record</h2>
-        <p class="hint">Enter your roll number first. Returning students get their name and supervisor filled in automatically &mdash; only the status needs updating.</p>
+        <span class="step-badge">Returning students</span>
+        <h2>Find Your Record</h2>
+        <p class="hint">Enter your roll number and click Edit to load your details, then update your status.</p>
       </div>
 
-      <form id="studentForm" autocomplete="off">
+      <div class="field-group">
+        <span class="field-icon">🎓</span>
+        <div class="field-body">
+          <label for="lookupRollNumber">Roll Number *</label>
+          <input type="text" id="lookupRollNumber" placeholder="e.g. CSC/2021/045" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-submit" id="findRecordBtn">
+        <span class="spinner"></span>
+        <span class="btn-label">Edit</span>
+      </button>
+
+      <div id="lookupError" class="lookup-error"></div>
+
+      <!-- Revealed once a record is found -->
+      <div id="updateRevealed" class="revealed-panel" hidden>
+        <div class="readonly-summary">
+          <div>
+            <span class="ro-label">Full Name</span>
+            <span class="ro-value" id="roFullName"></span>
+          </div>
+          <div>
+            <span class="ro-label">Supervisor</span>
+            <span class="ro-value" id="roSupervisor"></span>
+          </div>
+        </div>
+
+        <div class="progress-tracker" id="progressTracker"></div>
+
+        <form id="updateForm" autocomplete="off">
+          <div class="field-group">
+            <span class="field-icon">📈</span>
+            <div class="field-body">
+              <label for="updateStatus">Current Project Status *</label>
+              <select id="updateStatus" required>
+                <% statusValues.forEach(function(s) { %>
+                  <option value="<%= s %>"><%= s %></option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-submit" id="updateBtn">
+            <span class="spinner"></span>
+            <span class="btn-label">Update My Progress</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===================== First-time registration panel ===================== -->
+    <div class="form-card tab-panel" id="panel-register">
+      <div class="form-card-head">
+        <span class="step-badge">New students</span>
+        <h2>Register Your Project</h2>
+        <p class="hint">One-time setup. After this, use "Update My Progress" above to move through the stages.</p>
+      </div>
+
+      <form id="registerForm" autocomplete="off">
         <div class="field-group">
           <span class="field-icon">🎓</span>
           <div class="field-body">
             <label for="rollNumber">Roll Number *</label>
-            <input type="text" id="rollNumber" name="rollNumber" required placeholder="e.g. CSC/2021/045" />
+            <input type="text" id="rollNumber" required placeholder="e.g. CSC/2021/045" />
           </div>
         </div>
-
-        <div id="lookupHint" class="lookup-hint"></div>
-
-        <div class="field-group" id="fullNameGroup">
+        <div class="field-group">
           <span class="field-icon">🧑‍🎓</span>
           <div class="field-body">
             <label for="fullName">Full Name *</label>
-            <input type="text" id="fullName" name="fullName" placeholder="Your full name" />
+            <input type="text" id="fullName" required placeholder="Your full name" />
           </div>
         </div>
-
-        <div class="field-group" id="supervisorGroup">
+        <div class="field-group">
           <span class="field-icon">👨‍🏫</span>
           <div class="field-body">
             <label for="supervisor">Assigned Supervisor *</label>
-            <input type="text" id="supervisor" name="supervisor" placeholder="Supervisor's name" />
+            <input type="text" id="supervisor" required placeholder="Supervisor's name" />
           </div>
         </div>
-
         <div class="field-group">
           <span class="field-icon">📈</span>
           <div class="field-body">
             <label for="status">Current Project Status *</label>
-            <select id="status" name="status" required>
+            <select id="status" required>
               <option value="">Select status</option>
-              <option>Proposal</option>
-              <option>Chapter 1</option>
-              <option>Chapter 2</option>
-              <option>Chapter 3</option>
-              <option>Chapter 4</option>
-              <option>Chapter 5</option>
-              <option>Completed</option>
+              <% statusValues.forEach(function(s) { %>
+                <option value="<%= s %>"><%= s %></option>
+              <% }); %>
             </select>
           </div>
         </div>
-
-        <button type="submit" class="btn btn-submit" id="submitBtn">
+        <button type="submit" class="btn btn-submit" id="registerBtn">
           <span class="spinner"></span>
-          <span class="btn-label">Submit Progress</span>
+          <span class="btn-label">Register</span>
         </button>
       </form>
     </div>
@@ -99,6 +153,9 @@
 
   <div id="toast" class="toast"></div>
 
+  <script>
+    window.STATUS_VALUES = <%- JSON.stringify(statusValues) %>;
+  </script>
   <script src="/js/student.js"></script>
 </body>
 </html>
