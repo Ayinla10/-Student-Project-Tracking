@@ -65,8 +65,12 @@
     try {
       const res = await fetch(`/api/student/${encodeURIComponent(rollNumber)}`);
       if (res.status === 404) {
-        lookupError.innerHTML = `No record found for that roll number. <button type="button" class="link-btn" id="goRegister">Register here instead &rarr;</button>`;
-        document.getElementById('goRegister').addEventListener('click', () => switchToTab('register'));
+        lookupError.innerHTML = `You haven't added this roll number to the platform yet. <button type="button" class="link-btn" id="goRegister">Use First-Time Registration &rarr;</button>`;
+        document.getElementById('goRegister').addEventListener('click', () => {
+          document.getElementById('rollNumber').value = rollNumber;
+          switchToTab('register');
+          checkRegisterRollNumber();
+        });
         return;
       }
       const data = await res.json();
@@ -111,15 +115,69 @@
 
   // ---------------- First-Time Registration ----------------
   const registerForm = document.getElementById('registerForm');
+  const registerRollInput = document.getElementById('rollNumber');
+  const registerRollHint = document.getElementById('registerRollHint');
+  const registerRestFields = document.getElementById('registerRestFields');
+  let registerRollBlocked = false;
+  let registerCheckTimer = null;
+  let registerCheckToken = 0;
+
+  function setRegisterFieldsEnabled(enabled) {
+    registerRestFields.style.display = enabled ? '' : 'none';
+  }
+
+  async function checkRegisterRollNumber() {
+    const rollNumber = registerRollInput.value.trim();
+    const token = ++registerCheckToken;
+    registerRollHint.innerHTML = '';
+    registerRollBlocked = false;
+
+    if (!rollNumber) {
+      setRegisterFieldsEnabled(true);
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/student/${encodeURIComponent(rollNumber)}`);
+      if (token !== registerCheckToken) return; // a newer check superseded this one
+
+      if (res.status === 404) {
+        setRegisterFieldsEnabled(true);
+        return;
+      }
+
+      // Roll number already exists — block registration and point to the updater.
+      registerRollBlocked = true;
+      setRegisterFieldsEnabled(false);
+      registerRollHint.innerHTML = `This roll number is already registered. <button type="button" class="link-btn" id="goUpdate">Use Update My Progress instead &rarr;</button>`;
+      document.getElementById('goUpdate').addEventListener('click', () => {
+        lookupRollNumber.value = rollNumber;
+        switchToTab('update');
+        findRecordBtn.click();
+      });
+    } catch (err) {
+      // Network hiccup — don't block the form over a failed check.
+    }
+  }
+
+  registerRollInput.addEventListener('input', () => {
+    clearTimeout(registerCheckTimer);
+    registerCheckTimer = setTimeout(checkRegisterRollNumber, 450);
+  });
+  registerRollInput.addEventListener('blur', checkRegisterRollNumber);
 
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const rollNumber = document.getElementById('rollNumber').value.trim();
+    const rollNumber = registerRollInput.value.trim();
     const fullName = document.getElementById('fullName').value.trim();
     const supervisor = document.getElementById('supervisor').value.trim();
     const status = document.getElementById('status').value;
     const registerBtn = document.getElementById('registerBtn');
 
+    if (registerRollBlocked) {
+      showToast('That roll number is already registered — use Update My Progress instead.', 'error');
+      return;
+    }
     if (!rollNumber || !fullName || !supervisor || !status) {
       showToast('Please fill in all required fields.', 'error');
       return;
@@ -139,6 +197,8 @@
       }
       showToast(data.message, 'success');
       registerForm.reset();
+      setRegisterFieldsEnabled(true);
+      registerRollHint.innerHTML = '';
       lookupRollNumber.value = rollNumber;
       switchToTab('update');
     } catch (err) {

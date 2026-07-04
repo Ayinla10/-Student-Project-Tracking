@@ -98,36 +98,41 @@
             <input type="text" id="rollNumber" required placeholder="e.g. CSC/2021/045" />
           </div>
         </div>
-        <div class="field-group">
-          <span class="field-icon">🧑‍🎓</span>
-          <div class="field-body">
-            <label for="fullName">Full Name *</label>
-            <input type="text" id="fullName" required placeholder="Your full name" />
+
+        <div id="registerRollHint" class="lookup-error"></div>
+
+        <div id="registerRestFields">
+          <div class="field-group">
+            <span class="field-icon">🧑‍🎓</span>
+            <div class="field-body">
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" required placeholder="Your full name" />
+            </div>
           </div>
-        </div>
-        <div class="field-group">
-          <span class="field-icon">👨‍🏫</span>
-          <div class="field-body">
-            <label for="supervisor">Assigned Supervisor *</label>
-            <input type="text" id="supervisor" required placeholder="Supervisor's name" />
+          <div class="field-group">
+            <span class="field-icon">👨‍🏫</span>
+            <div class="field-body">
+              <label for="supervisor">Assigned Supervisor *</label>
+              <input type="text" id="supervisor" required placeholder="Supervisor's name" />
+            </div>
           </div>
-        </div>
-        <div class="field-group">
-          <span class="field-icon">📈</span>
-          <div class="field-body">
-            <label for="status">Current Project Status *</label>
-            <select id="status" required>
-              <option value="">Select status</option>
-              <% statusValues.forEach(function(s) { %>
-                <option value="<%= s %>"><%= s %></option>
-              <% }); %>
-            </select>
+          <div class="field-group">
+            <span class="field-icon">📈</span>
+            <div class="field-body">
+              <label for="status">Current Project Status *</label>
+              <select id="status" required>
+                <option value="">Select status</option>
+                <% statusValues.forEach(function(s) { %>
+                  <option value="<%= s %>"><%= s %></option>
+                <% }); %>
+              </select>
+            </div>
           </div>
+          <button type="submit" class="btn btn-submit" id="registerBtn">
+            <span class="spinner"></span>
+            <span class="btn-label">Register</span>
+          </button>
         </div>
-        <button type="submit" class="btn btn-submit" id="registerBtn">
-          <span class="spinner"></span>
-          <span class="btn-label">Register</span>
-        </button>
       </form>
     </div>
 
