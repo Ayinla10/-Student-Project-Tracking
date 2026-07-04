@@ -18,11 +18,12 @@
     <div class="hero-wave"></div>
   </div>
 
-  <div class="container">
-    <div class="announcement">
+  <div class="modal-overlay" id="announcementOverlay">
+    <div class="modal announcement-modal">
+      <button type="button" class="modal-close" id="announcementClose" aria-label="Close announcement">&times;</button>
       <div class="announcement-icon">📢</div>
+      <span class="announcement-title">Announcement</span>
       <div class="announcement-body">
-        <span class="announcement-title">Announcement</span>
         <p>Good morning, Students,</p>
         <p>Hope you are doing well.</p>
         <p>The final project defense will be on <strong>Saturday, September 5th, at 9:00&nbsp;AM</strong>.</p>
@@ -30,8 +31,11 @@
         <p>A <strong>soft copy</strong> of the report must be sent to <strong>Mariam Adoley (BlueCrest)</strong> for plagiarism checking <strong>one week before the defense</strong>.</p>
         <p><strong>Two copies of the hardbound report</strong> must be submitted by <strong>Saturday, September 12th</strong>.</p>
       </div>
+      <button type="button" class="btn btn-submit" id="announcementGotIt">Got it</button>
     </div>
+  </div>
 
+  <div class="container">
     <div class="tabs">
       <button type="button" class="tab-btn active" data-tab="update">Update My Progress</button>
       <button type="button" class="tab-btn" data-tab="register">First-Time Registration</button>

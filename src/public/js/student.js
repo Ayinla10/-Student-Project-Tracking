@@ -1,6 +1,24 @@
 (function () {
   const STATUS_VALUES = window.STATUS_VALUES || [];
 
+  // ---------------- Announcement popup ----------------
+  const ANNOUNCEMENT_KEY = 'announcement_defense_2026_09_05_dismissed';
+  const announcementOverlay = document.getElementById('announcementOverlay');
+  if (announcementOverlay) {
+    if (!sessionStorage.getItem(ANNOUNCEMENT_KEY)) {
+      announcementOverlay.classList.add('show');
+    }
+    const dismissAnnouncement = () => {
+      announcementOverlay.classList.remove('show');
+      sessionStorage.setItem(ANNOUNCEMENT_KEY, '1');
+    };
+    document.getElementById('announcementClose').addEventListener('click', dismissAnnouncement);
+    document.getElementById('announcementGotIt').addEventListener('click', dismissAnnouncement);
+    announcementOverlay.addEventListener('click', (e) => {
+      if (e.target === announcementOverlay) dismissAnnouncement();
+    });
+  }
+
   function showToast(message, type) {
     const toast = document.getElementById('toast');
     toast.textContent = message;

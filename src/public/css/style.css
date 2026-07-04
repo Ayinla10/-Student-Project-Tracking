@@ -418,41 +418,58 @@ body.student-page {
 }
 .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(26, 115, 232, 0.42); }
 
-/* ---- Tabs ---- */
-.announcement {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
+/* ---- Announcement popup ---- */
+.announcement-modal {
+  position: relative;
+  max-width: 460px;
   background: #fff8e6;
   border: 1px solid #f5deA0;
-  border-left: 4px solid #d9a400;
-  border-radius: 12px;
-  padding: 16px 18px;
-  margin-bottom: 18px;
-  box-shadow: 0 6px 18px rgba(217, 164, 0, 0.12);
+  border-top: 4px solid #d9a400;
+  text-align: left;
 }
-.announcement-icon {
-  font-size: 1.4rem;
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
   line-height: 1;
-  margin-top: 2px;
+  color: #a06b00;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
-.announcement-title {
+.modal-close:hover { background: rgba(160, 107, 0, 0.1); }
+.announcement-modal .announcement-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.announcement-modal .announcement-title {
   display: block;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #a06b00;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
-.announcement-body p {
+.announcement-modal .announcement-body p {
   margin: 0 0 8px;
   font-size: 0.9rem;
   color: #4a3d1a;
   line-height: 1.5;
 }
-.announcement-body p:last-child { margin-bottom: 0; }
-.announcement-body strong { color: #7a5200; }
+.announcement-modal .announcement-body p:last-child { margin-bottom: 14px; }
+.announcement-modal .announcement-body strong { color: #7a5200; }
+.announcement-modal .btn-submit {
+  background: #d9a400;
+  box-shadow: 0 8px 20px rgba(217, 164, 0, 0.35);
+}
+.announcement-modal .btn-submit:hover { background: #b98a00; }
+
+/* ---- Tabs ---- */
 
 .tabs {
   display: flex;
